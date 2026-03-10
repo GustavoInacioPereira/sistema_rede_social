@@ -2,13 +2,15 @@ package views;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
 import entities.User;
 import services.RegisterUser;
 import utilities.VerifyLogin;
 import utilities.VerifyOption;
 
 public class ViewInitialHUB {
-    public static void view(Scanner sc, List<User> users) {
+    public static void view(Scanner sc, List<User> users, Set<String> emailsRegistred) {
         boolean control = true;
         while (control) {
             System.out.printf("------Tela Inicial------ %n");
@@ -18,11 +20,11 @@ public class ViewInitialHUB {
             switch (option) {
                 case 1:
                     User userLogged = VerifyLogin.verify(users, sc);
-                    ViewLogged.view(sc, userLogged, users);
+                    ViewLogged.view(sc, userLogged, users, emailsRegistred);
                     break;
                 case 2:
-                    userLogged = RegisterUser.register(sc, users);
-                    ViewLogged.view(sc, userLogged, users);
+                    userLogged = RegisterUser.register(sc, users, emailsRegistred);
+                    ViewLogged.view(sc, userLogged, users, emailsRegistred);
                     break;
                 case 3:
                     ViewNoLogged.view(users);

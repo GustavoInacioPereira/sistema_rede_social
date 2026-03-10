@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
 import entities.Posts;
 import entities.User;
 import services.CreatePost;
+import services.DeleteUserService;
+import utilities.VerifyOption;
 
 public class ViewLogged {
-    public static void view(Scanner sc, User userLooged, List<User> users) {
+    public static void view(Scanner sc, User userLooged, List<User> users, Set<String> emailsRegistred) {
         boolean control = true;
         while (control) {
             List<Posts> globalFeed = new ArrayList<Posts>();
@@ -20,7 +24,7 @@ public class ViewLogged {
 
                 }
             }
-            
+
             globalFeed.sort(Comparator.comparing(Posts::getDateHour));
 
             if (globalFeed.isEmpty()) {
@@ -35,8 +39,23 @@ public class ViewLogged {
                 }
             }
 
-            control = CreatePost.create(sc, userLooged, globalFeed);
+            System.out.printf("Digite a Opção abaixo: %n1 - Criar um Post %n2 - Deletar Conta %n3 - Sair");
+            int option = VerifyOption.verify(1, 3, sc);
 
+            switch (option) {
+                case 1:
+                    CreatePost.create(sc, userLooged, globalFeed);
+                    break;
+                case 2:
+                    DeleteUserService.delete(userLooged, users, emailsRegistred);
+                    control = false;
+                    break;
+
+                case 3:
+                    control = false;
+                    break;
+
+            }
         }
     }
 }
