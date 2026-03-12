@@ -1,29 +1,26 @@
 package services;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 import paths.PathDocuments;
 
 public class GenerateID {
     
     public static int getNextUserId() {
-        int maxId = -1;
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(PathDocuments.USER_PATH))) {
-            String line = br.readLine();
-            while (line != null) {
-                if (!line.trim().isEmpty()) {
-                    
-                    int currentId = Integer.parseInt(line.split(";")[0]);
-                    if (currentId > maxId) {
-                        maxId = currentId;
-                    }
-                }
-                line = br.readLine();
-            }
-        } catch (Exception e) {
 
+        
+        try (Stream<String> linhasDoArquivo = Files.lines(Paths.get(PathDocuments.USER_PATH))) {
+
+            int maxId = linhasDoArquivo
+                .filter(line -> !line.trim().isEmpty())
+                .mapToInt(line -> Integer.parseInt(line.split(";")[0]))
+                .max()
+                .orElse(0);
+                return maxId + 1;
+        } catch (Exception e) {
+                System.out.println("Erro ao ler o arquivo para gerar ID.");
+                return 1;
         }
-        return maxId + 1;
+        
     }
 }

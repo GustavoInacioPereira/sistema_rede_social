@@ -1,22 +1,21 @@
 package views;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import entities.Posts;
 import entities.User;
 
 public class ViewNoLogged {
     public static void view(List<User> users) {
-        List<Posts> globalFeed = new ArrayList<Posts>();
-        for (int i = 0; i < users.size(); i++) {
-            for (int j = 0; j < users.get(i).getPosts().size(); j++) {
-                globalFeed.add(users.get(i).getPosts().get(j));
-            }
-        }
-        globalFeed.sort(Comparator.comparing(Posts::getDateHour));
+        List<Posts> globalFeed = users.stream()
+            .flatMap(user -> user.getPosts().stream())
+            .sorted(Comparator.comparing(Posts::getDateHour))
+            .collect(Collectors.toList());
+    
+
         if (globalFeed.isEmpty()) {
             System.out.println("Não Há Posts Realizados");
         } else {

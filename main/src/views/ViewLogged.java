@@ -1,11 +1,11 @@
 package views;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import entities.Posts;
 import entities.User;
@@ -17,15 +17,12 @@ public class ViewLogged {
     public static void view(Scanner sc, User userLooged, List<User> users, Set<String> emailsRegistred) {
         boolean control = true;
         while (control) {
-            List<Posts> globalFeed = new ArrayList<Posts>();
-            for (int i = 0; i < users.size(); i++) {
-                for (int j = 0; j < users.get(i).getPosts().size(); j++) {
-                    globalFeed.add(users.get(i).getPosts().get(j));
+             List<Posts> globalFeed = users.stream()
+            .flatMap(user -> user.getPosts().stream())
+            .sorted(Comparator.comparing(Posts::getDateHour))
+            .collect(Collectors.toList());
+            
 
-                }
-            }
-
-            globalFeed.sort(Comparator.comparing(Posts::getDateHour));
 
             if (globalFeed.isEmpty()) {
                 System.out.println("Não Há Posts Realizados");
