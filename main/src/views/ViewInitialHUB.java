@@ -24,7 +24,9 @@ public class ViewInitialHUB {
                     break;
                 case 2:
                     userLogged = RegisterUser.register(sc, users, emailsRegistred);
-                    ViewLogged.view(sc, userLogged, users, emailsRegistred);
+                    if(userLogged != null) {
+                        ViewLogged.view(sc, userLogged, users, emailsRegistred);
+                    }
                     break;
                 case 3:
                     ViewNoLogged.view(users);

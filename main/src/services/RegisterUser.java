@@ -1,19 +1,22 @@
 package services;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-
+import db.dbConnect;
+import db.dbException;
 import entities.User;
-import paths.PathDocuments;
+import entities.enums.Status;
 import utilities.VerifyEmailRegistry;
 import utilities.VerifyType;
 
 public class RegisterUser {
     public static User register(Scanner sc, List<User> users, Set<String> emailsRegistred) {
         User userLogged = null;
+       
         System.out.printf("Digite seu Nome: %n");
         String name = sc.nextLine();
         System.out.printf("Digite o Email: %n");
@@ -24,12 +27,24 @@ public class RegisterUser {
         if (!VerifyEmailRegistry.verify(email, emailsRegistred)) {
             System.out.printf("Email ja cadastrado %n");
         } else {
-            users.add(new User(GenerateID.getNextUserId(), name, email, password, entities.enums.Status.ACTIVE));
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(PathDocuments.USER_PATH, true))) {
-                bw.newLine();
-                bw.write(users.getLast().toString());
+            Connection conn = dbConnect.getConnection();
+            try (PreparedStatement pst = conn.prepareStatement("INSERT INTO users (nome, email, senha, statusUser) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {               
+                pst.setString(1, name);
+                pst.setString(2, email);
+                pst.setString(3, password);
+                pst.setString(4, Status.ACTIVE.name());
+                pst.executeUpdate();
+
+                try(ResultSet rs = pst.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int idGenerate = rs.getInt(1);
+                        users.add(new User(idGenerate, name, email, password, entities.enums.Status.ACTIVE));
+                    }
+                    
+                }
+
             } catch (Exception e) {
-                System.out.printf("Erro ao Escrever Documento %n");
+                throw new dbException(e.getMessage());
             }
 
             System.out.printf("Usuario Cadastrado com Sucesso %n");

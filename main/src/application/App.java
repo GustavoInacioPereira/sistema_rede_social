@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import db.dbConnect;
 import entities.User;
+import services.ReadPostInfos;
 import services.ReadUserInfos;
 import services.SetEmailInCache;
 import views.ViewInitialHUB;
@@ -12,9 +14,12 @@ import views.ViewInitialHUB;
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in, "CP850");
+        sc.useLocale(java.util.Locale.US);
         List<User> users = new ArrayList<User>();
         ReadUserInfos.read(users);
+        ReadPostInfos.read(users);
         Set<String> emailsRegistred = SetEmailInCache.set(users);
         ViewInitialHUB.view(sc, users, emailsRegistred);
+        dbConnect.closeConnection();
     }
 }

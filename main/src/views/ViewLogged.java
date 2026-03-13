@@ -36,12 +36,12 @@ public class ViewLogged {
                 }
             }
 
-            System.out.printf("Digite a Opção abaixo: %n1 - Criar um Post %n2 - Deletar Conta %n3 - Sair");
+            System.out.printf("Digite a Opção abaixo: %n1 - Criar um Post %n2 - Deletar Conta %n3 - Sair %n");
             int option = VerifyOption.verify(1, 3, sc);
 
             switch (option) {
                 case 1:
-                    CreatePost.create(sc, userLooged, globalFeed);
+                    CreatePost.create(sc, userLooged);
                     break;
                 case 2:
                     DeleteUserService.delete(userLooged, users, emailsRegistred);
