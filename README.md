@@ -1,4 +1,4 @@
-<h1>Mini Rede Social (CLI)</h1>
+<h1>Mini Rede Social (Legado)</h1>
 <h2>📝 Resumo </h2>
 <p>Este projeto é uma simulação de uma rede social baseada em terminal (Command Line Interface), desenvolvida puramente em Java. O sistema permite o cadastro de novos usuários, autenticação segura, criação de postagens e a exibição de uma "Linha do Tempo" (Global Feed). Mais do que uma simples aplicação de terminal, este projeto é um laboratório prático de <b>Arquitetura de Software, Paradigma Funcional (Java 8+), Estruturas de Dados de Alta Performance e Persistência de Dados (Java NIO.2)</b>, lidando com desafios reais de sincronização entre Memória RAM e Disco Rígido.</p>
 
